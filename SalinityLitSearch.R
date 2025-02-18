@@ -21,18 +21,6 @@ library(patchwork)
 here::i_am("SalinityLitSearch.R")
 
 # > 1.3: Read in data -----
-
-# Note that for Scopus export (=< 20000 entries) the total search needed to be
-# broken up into several files:
-df_MDS_1950_1999 = read.csv("MSD_1950_1999.csv")
-df_MDS_2000_2010 = read.csv("MSD_2000_2010.csv")
-df_MDS_2011_2020 = read.csv("MSD_2011_2020.csv")
-df_MDS_2021_2024 = read.csv("MSD_2021_2024.csv")
-df_MDS = rbind(df_MDS_1950_1999,
-               df_MDS_2000_2010,
-               df_MDS_2011_2020,
-               df_MDS_2021_2024)
-
 df_MDS_E = read.csv("MSD_Env_all.csv")
 df_MDS_T = read.csv("MSD_Temp_all.csv")
 df_MDS_S = read.csv("MSD_Sal_all.csv")
@@ -43,8 +31,7 @@ fonts()
 
 # 2: Subset for checks -----
 # Only done once, hence, this is commented out to avoid overwriting files
-# df_MDS_samp = df_MDS[sample(1:length(df_MDS$Authors),
-#                             size = 200),]
+
 # df_MDS_E_samp = df_MDS_E[sample(1:length(df_MDS_E$Authors),
 #                             size = 200),]
 # df_MDS_T_samp = df_MDS_T[sample(1:length(df_MDS_T$Authors),
@@ -52,8 +39,6 @@ fonts()
 # df_MDS_S_samp = df_MDS_S[sample(1:length(df_MDS_S$Authors),
 #                             size = 200),]
 
-# write.csv(df_MDS_samp,
-#           "df_MDS_samp.csv")
 # write.csv(df_MDS_E_samp,
 #           "df_MDS_E_samp.csv")
 # write.csv(df_MDS_T_samp,
@@ -64,25 +49,16 @@ fonts()
 #
 
 # 3: Read in checks & calculate correction -----
-df_MDS_samp = read.csv("df_MDS_samp_checked.csv")
 df_MDS_E_samp = read.csv("df_MDS_E_samp_checked.csv")
 df_MDS_T_samp = read.csv("df_MDS_T_samp_checked.csv")
 df_MDS_S_samp = read.csv("df_MDS_S_samp_checked.csv")
 
 # Proportion relevant
-rlvt = mean(df_MDS_samp$Relevant)
 rlvt_E = mean(df_MDS_E_samp$Relevant)
 rlvt_T = mean(df_MDS_T_samp$Relevant)
 rlvt_S = mean(df_MDS_S_samp$Relevant)
 
 # 4: Summarize, apply correction, and plot -----
-df_MDS_summ =
-  df_MDS |>
-  group_by(Year) |>
-  summarize(papers = length(Title),
-            papers_corr = papers * rlvt,
-            set = "disease")
-
 df_MDS_E_summ =
   df_MDS_E |>
   group_by(Year) |>
@@ -106,8 +82,7 @@ df_MDS_S_summ =
 
 # Combine into single df
 df_MDS_full_summ =
-  rbind(df_MDS_summ,
-        df_MDS_E_summ,
+  rbind(df_MDS_E_summ,
         df_MDS_T_summ,
         df_MDS_S_summ)
 
@@ -122,8 +97,7 @@ df_MDS_full_summ =
 df_MDS_full_summ$set = factor(df_MDS_full_summ$set,
                               levels = c("salinity",
                                          "temperature",
-                                         "environment",
-                                         "disease"))
+                                         "environment"))
 # Cut overall disease to focus figure
 ggplot(data = df_MDS_full_summ |>
          filter(set != "disease")) +
