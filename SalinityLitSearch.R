@@ -7,7 +7,7 @@
 # 1: Getting Started -----------------------------------------------------------
 # > 1.1: Clear everything ----- 
 # clear workspace
-rm(list=ls())
+# rm(list=ls())
 # clear console
 cat("\014")
 

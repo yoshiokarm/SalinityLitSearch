@@ -14,11 +14,11 @@ Compiles and plots a Scopus search comparing the relative research effort into s
 
 -   SalinityLitSearch.R - R script for combining, subsetting, and graphing all data.
 
--   Data - not currently in repository. May be added pending space considerations or included as supplementary material in the online manuscript.
+-   SalinityLitSearchData.zip - a compressed file containing the data files (below) needed for analysis.
 
 ------------------------------------------------------------------------
 
-## Data 
+## Data
 
 -   MSD_Sal_all.csv - Marine Disease + Salinity records
 
